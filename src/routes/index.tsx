@@ -136,7 +136,12 @@ function SearchBar() {
 }
 
 function Home() {
-  const featured = ROOMS.slice(0, 3);
+  const { rooms, reviews } = Route.useLoaderData();
+  const featured = rooms.slice(0, 3);
+  const guestReviews =
+    reviews.length > 0
+      ? reviews.map((r) => ({ name: r.guest_name, city: r.city, rating: r.rating, text: r.body }))
+      : REVIEWS;
 
   return (
     <>
