@@ -20,9 +20,22 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import heroImage from "@/assets/hero-exterior.jpg";
-import { AMENITIES, ATTRACTIONS, GALLERY, HOTEL, ROOMS, REVIEWS, inr } from "@/lib/hotel";
+import { AMENITIES, ATTRACTIONS, GALLERY, HOTEL, REVIEWS, inr } from "@/lib/hotel";
+import { listRooms, listReviews } from "@/lib/hotel.functions";
+import { roomImages } from "@/lib/room-images";
 
 export const Route = createFileRoute("/")({
+  loader: async () => ({
+    rooms: await listRooms(),
+    reviews: await listReviews(),
+  }),
+  errorComponent: () => (
+    <div className="mx-auto max-w-3xl px-4 pt-40 text-center">
+      <h1 className="font-display text-4xl">We're getting things ready</h1>
+      <p className="mt-3 text-muted-foreground">Please refresh in a moment.</p>
+    </div>
+  ),
+  notFoundComponent: () => <div className="pt-40 text-center">Not found</div>,
   head: () => ({
     meta: [
       { title: "Selvi Residency — Hotel in Muthialpet, Puducherry" },
