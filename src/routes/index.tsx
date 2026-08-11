@@ -334,7 +334,7 @@ function Home() {
           <p className="eyebrow">Guest reviews</p>
           <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">What families say</h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {REVIEWS.map((r) => (
+            {guestReviews.slice(0, 4).map((r) => (
               <blockquote
                 key={r.name}
                 className="lift-card rounded-3xl border bg-card p-6 shadow-soft"
