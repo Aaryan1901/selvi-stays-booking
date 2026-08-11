@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckCircle2, ShieldCheck } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { CheckCircle2, ShieldCheck, TicketPercent } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { HOTEL, ROOMS, inr } from "@/lib/hotel";
+import { HOTEL, inr } from "@/lib/hotel";
+import { roomImages } from "@/lib/room-images";
+import { checkAvailability, createBooking, listRooms, quoteBooking } from "@/lib/hotel.functions";
+
+type RoomRow = Awaited<ReturnType<typeof listRooms>>[number];
 
 type BookingSearch = {
   room?: string | undefined;
@@ -24,6 +29,7 @@ type BookingSearch = {
 };
 
 export const Route = createFileRoute("/booking")({
+  loader: () => listRooms(),
   validateSearch: (search: Record<string, unknown>): BookingSearch => ({
     room: typeof search["room"] === "string" ? search["room"] : undefined,
     checkIn: typeof search["checkIn"] === "string" ? search["checkIn"] : undefined,
@@ -47,6 +53,13 @@ export const Route = createFileRoute("/booking")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  errorComponent: () => (
+    <div className="mx-auto max-w-3xl px-4 pt-40 text-center">
+      <h1 className="font-display text-4xl">Booking is loading slowly</h1>
+      <p className="mt-3 text-muted-foreground">Please refresh in a moment.</p>
+    </div>
+  ),
+  notFoundComponent: () => <div className="pt-40 text-center">Not found</div>,
   component: BookingPage,
 });
 
@@ -61,11 +74,18 @@ const schema = z.object({
   checkOut: z.string().min(1, "Choose a check-out date"),
 });
 
+type Confirmation = Awaited<ReturnType<typeof createBooking>>;
+
 function BookingPage() {
+  const rooms = Route.useLoaderData() as RoomRow[];
   const search = Route.useSearch();
   const today = new Date().toISOString().slice(0, 10);
 
-  const [roomId, setRoomId] = useState(search.room ?? ROOMS[0]!.id);
+  const submitBooking = useServerFn(createBooking);
+  const getQuote = useServerFn(quoteBooking);
+  const getAvailability = useServerFn(checkAvailability);
+
+  const [roomCode, setRoomCode] = useState(search.room ?? rooms[0]?.code ?? "");
   const [checkIn, setCheckIn] = useState(search.checkIn ?? today);
   const [checkOut, setCheckOut] = useState(search.checkOut ?? "");
   const [adults, setAdults] = useState(search.guests ?? 2);
@@ -74,29 +94,62 @@ function BookingPage() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [request, setRequest] = useState("");
+  const [coupon, setCoupon] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [confirmed, setConfirmed] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  const [bookedCodes, setBookedCodes] = useState<string[]>([]);
+  const [quote, setQuote] = useState<Awaited<ReturnType<typeof quoteBooking>> | null>(null);
+  const [confirmed, setConfirmed] = useState<Confirmation | null>(null);
 
-  const room = ROOMS.find((r) => r.id === roomId) ?? ROOMS[0]!;
+  const room = useMemo(
+    () => rooms.find((r) => r.code === roomCode) ?? rooms[0],
+    [rooms, roomCode],
+  );
 
-  const totals = useMemo(() => {
-    const start = new Date(checkIn);
-    const end = new Date(checkOut);
-    const ms = end.getTime() - start.getTime();
-    const nights = Number.isFinite(ms) && ms > 0 ? Math.round(ms / 86_400_000) : 0;
-    const subtotal = nights * room.price;
-    const gst = Math.round(subtotal * HOTEL.gstRate);
-    return { nights, subtotal, gst, total: subtotal + gst };
-  }, [checkIn, checkOut, room.price]);
+  useEffect(() => {
+    if (!checkIn || !checkOut) {
+      setBookedCodes([]);
+      return;
+    }
+    let cancelled = false;
+    void getAvailability({ data: { checkIn, checkOut } })
+      .then((res) => {
+        if (!cancelled) setBookedCodes(res.bookedCodes);
+      })
+      .catch(() => setBookedCodes([]));
+    return () => {
+      cancelled = true;
+    };
+  }, [checkIn, checkOut, getAvailability]);
 
-  const submit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (!room || !checkIn || !checkOut) {
+      setQuote(null);
+      return;
+    }
+    let cancelled = false;
+    void getQuote({
+      data: { roomCode: room.code, checkIn, checkOut, coupon: appliedCoupon || undefined },
+    })
+      .then((res) => {
+        if (!cancelled) setQuote(res);
+      })
+      .catch(() => setQuote(null));
+    return () => {
+      cancelled = true;
+    };
+  }, [room, checkIn, checkOut, appliedCoupon, getQuote]);
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!room) return;
     const parsed = schema.safeParse({ name, phone, email, checkIn, checkOut });
     const next: Record<string, string> = {};
     if (!parsed.success) {
       for (const issue of parsed.error.issues) next[String(issue.path[0])] = issue.message;
     }
-    if (totals.nights <= 0) next["checkOut"] = "Check-out must be after check-in";
+    if (!quote || quote.nights <= 0) next["checkOut"] = "Check-out must be after check-in";
     if (adults + children > room.occupancy)
       next["adults"] = `This room sleeps up to ${room.occupancy} guests`;
 
@@ -106,11 +159,33 @@ function BookingPage() {
     }
 
     setErrors({});
-    const id = `SR${Date.now().toString().slice(-8)}`;
-    setConfirmed(id);
-    toast.success("Booking request received", {
-      description: `Reference ${id}. Reception will confirm shortly.`,
-    });
+    setPending(true);
+    try {
+      const result = await submitBooking({
+        data: {
+          roomCode: room.code,
+          checkIn,
+          checkOut,
+          adults,
+          children,
+          name,
+          phone,
+          email,
+          request: request || undefined,
+          coupon: appliedCoupon || undefined,
+        },
+      });
+      setConfirmed(result);
+      toast.success("Booking request received", {
+        description: `Reference ${result.reference}. Reception will confirm shortly.`,
+      });
+    } catch (err) {
+      toast.error("We couldn't save that booking", {
+        description: err instanceof Error ? err.message : "Please try again.",
+      });
+    } finally {
+      setPending(false);
+    }
   };
 
   if (confirmed) {
@@ -123,11 +198,17 @@ function BookingPage() {
             We've noted your stay at {HOTEL.name}. Reception will call {phone} to confirm.
           </p>
           <dl className="mt-8 space-y-3 rounded-2xl border bg-card p-6 text-left text-sm">
-            <Row label="Reference" value={confirmed} />
-            <Row label="Room" value={room.name} />
-            <Row label="Stay" value={`${checkIn} → ${checkOut} · ${totals.nights} night(s)`} />
+            <Row label="Reference" value={confirmed.reference} />
+            <Row label="Room" value={confirmed.roomName} />
+            <Row
+              label="Stay"
+              value={`${checkIn} → ${checkOut} · ${confirmed.nights} night(s)`}
+            />
             <Row label="Guests" value={`${adults} adults, ${children} children`} />
-            <Row label="Amount payable" value={inr(totals.total)} strong />
+            {confirmed.discount > 0 && (
+              <Row label="Discount" value={`− ${inr(confirmed.discount)}`} />
+            )}
+            <Row label="Amount payable" value={inr(confirmed.total)} strong />
           </dl>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button asChild className="rounded-full">
@@ -153,20 +234,26 @@ function BookingPage() {
       </p>
 
       <div className="mt-12 grid gap-8 lg:grid-cols-[1.3fr_1fr]">
-        <form onSubmit={submit} noValidate className="space-y-6 rounded-3xl border bg-card p-6 shadow-soft sm:p-8">
+        <form
+          onSubmit={submit}
+          noValidate
+          className="space-y-6 rounded-3xl border bg-card p-6 shadow-soft sm:p-8"
+        >
           <div className="space-y-1.5">
             <Label>Room</Label>
-            <Select value={roomId} onValueChange={setRoomId}>
+            <Select value={roomCode} onValueChange={setRoomCode}>
               <SelectTrigger className="rounded-xl">
                 <SelectValue placeholder="Choose a room" />
               </SelectTrigger>
               <SelectContent>
-                {ROOMS.map((r) => (
-                  <SelectItem key={r.id} value={r.id} disabled={!r.available}>
-                    {r.name} — {inr(r.price)}/night
-                    {r.available ? "" : " (booked out)"}
-                  </SelectItem>
-                ))}
+                {rooms.map((r) => {
+                  const taken = bookedCodes.includes(r.code);
+                  return (
+                    <SelectItem key={r.code} value={r.code} disabled={taken}>
+                      {r.name} — {inr(r.price)}/night{taken ? " (booked for these dates)" : ""}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
           </div>
@@ -211,7 +298,11 @@ function BookingPage() {
               />
             </Field>
             <Field label="Full name" error={errors["name"]}>
-              <Input value={name} onChange={(e) => setName(e.target.value)} className="rounded-xl" />
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="rounded-xl"
+              />
             </Field>
             <Field label="Phone number" error={errors["phone"]}>
               <Input
@@ -232,6 +323,32 @@ function BookingPage() {
             />
           </Field>
 
+          <div className="space-y-1.5">
+            <Label>Coupon code</Label>
+            <div className="flex gap-2">
+              <Input
+                value={coupon}
+                onChange={(e) => setCoupon(e.target.value.toUpperCase())}
+                placeholder="DIRECT10"
+                className="rounded-xl"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                className="rounded-xl"
+                onClick={() => setAppliedCoupon(coupon.trim())}
+              >
+                <TicketPercent className="mr-1.5 size-4" /> Apply
+              </Button>
+            </div>
+            {quote?.couponError && (
+              <p className="text-xs text-destructive">{quote.couponError}</p>
+            )}
+            {!quote?.couponError && quote && quote.discount > 0 && (
+              <p className="text-xs text-gold">Coupon applied — you save {inr(quote.discount)}.</p>
+            )}
+          </div>
+
           <Field label="Special request">
             <Textarea
               rows={4}
@@ -242,8 +359,8 @@ function BookingPage() {
             />
           </Field>
 
-          <Button type="submit" size="lg" className="w-full rounded-full">
-            Confirm booking
+          <Button type="submit" size="lg" disabled={pending} className="w-full rounded-full">
+            {pending ? "Saving…" : "Confirm booking"}
           </Button>
           <p className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <ShieldCheck className="size-3.5 text-gold" /> Secure online payment is being set up —
@@ -254,22 +371,25 @@ function BookingPage() {
         <aside className="h-fit lg:sticky lg:top-28">
           <div className="glass-panel overflow-hidden rounded-3xl">
             <img
-              src={room.images[0]}
-              alt={room.name}
+              src={roomImages(room?.image_key ?? "deluxe")[0]}
+              alt={room?.name ?? "Room"}
               loading="lazy"
               width={1280}
               height={960}
               className="aspect-4/3 w-full object-cover"
             />
             <div className="space-y-4 p-6">
-              <h2 className="font-display text-2xl">{room.name}</h2>
+              <h2 className="font-display text-2xl">{room?.name}</h2>
               <dl className="space-y-2.5 text-sm">
-                <Row label="Rate per night" value={inr(room.price)} />
-                <Row label="Nights" value={String(totals.nights)} />
-                <Row label="Subtotal" value={inr(totals.subtotal)} />
-                <Row label={`GST (${HOTEL.gstRate * 100}%)`} value={inr(totals.gst)} />
+                <Row label="Rate per night" value={inr(room?.price ?? 0)} />
+                <Row label="Nights" value={String(quote?.nights ?? 0)} />
+                <Row label="Subtotal" value={inr(quote?.subtotal ?? 0)} />
+                {(quote?.discount ?? 0) > 0 && (
+                  <Row label="Coupon discount" value={`− ${inr(quote?.discount ?? 0)}`} />
+                )}
+                <Row label="GST (12%)" value={inr(quote?.tax ?? 0)} />
                 <div className="border-t pt-3">
-                  <Row label="Final amount" value={inr(totals.total)} strong />
+                  <Row label="Final amount" value={inr(quote?.total ?? 0)} strong />
                 </div>
               </dl>
             </div>
