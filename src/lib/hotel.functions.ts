@@ -164,7 +164,7 @@ export const createBooking = createServerFn({ method: "POST" })
       .gt("check_out", data.checkIn)
       .limit(1);
     if (clash && clash.length > 0)
-      throw new Error("Those dates were just taken for this room. Please pick другое — different dates.");
+      throw new Error("Those dates were just taken for this room. Please pick different dates.");
 
     let discount = 0;
     let couponCode: string | null = null;
