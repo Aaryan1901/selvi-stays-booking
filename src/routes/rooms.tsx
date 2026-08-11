@@ -127,10 +127,11 @@ function RoomsPage() {
       </p>
 
       <div className="mt-12 space-y-8">
-        {rooms.map((room) => (
+        {(rooms as RoomRow[]).map((room) => (
           <RoomCard key={room.id} room={room} />
         ))}
       </div>
+
     </div>
   );
 }
