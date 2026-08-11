@@ -20,9 +20,22 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import heroImage from "@/assets/hero-exterior.jpg";
-import { AMENITIES, ATTRACTIONS, GALLERY, HOTEL, ROOMS, REVIEWS, inr } from "@/lib/hotel";
+import { AMENITIES, ATTRACTIONS, GALLERY, HOTEL, REVIEWS, inr } from "@/lib/hotel";
+import { listRooms, listReviews } from "@/lib/hotel.functions";
+import { roomImages } from "@/lib/room-images";
 
 export const Route = createFileRoute("/")({
+  loader: async () => ({
+    rooms: await listRooms(),
+    reviews: await listReviews(),
+  }),
+  errorComponent: () => (
+    <div className="mx-auto max-w-3xl px-4 pt-40 text-center">
+      <h1 className="font-display text-4xl">We're getting things ready</h1>
+      <p className="mt-3 text-muted-foreground">Please refresh in a moment.</p>
+    </div>
+  ),
+  notFoundComponent: () => <div className="pt-40 text-center">Not found</div>,
   head: () => ({
     meta: [
       { title: "Selvi Residency — Hotel in Muthialpet, Puducherry" },
@@ -122,8 +135,19 @@ function SearchBar() {
   );
 }
 
+type RoomRow = Awaited<ReturnType<typeof listRooms>>[number];
+type ReviewRow = Awaited<ReturnType<typeof listReviews>>[number];
+
 function Home() {
-  const featured = ROOMS.slice(0, 3);
+  const { rooms, reviews } = Route.useLoaderData() as {
+    rooms: RoomRow[];
+    reviews: ReviewRow[];
+  };
+  const featured = rooms.slice(0, 3);
+  const guestReviews =
+    reviews.length > 0
+      ? reviews.map((r) => ({ name: r.guest_name, city: r.city, rating: r.rating, text: r.body }))
+      : REVIEWS;
 
   return (
     <>
@@ -190,7 +214,7 @@ function Home() {
             >
               <div className="relative aspect-4/3 overflow-hidden">
                 <img
-                  src={room.images[0]}
+                  src={roomImages(room.image_key)[0]}
                   alt={room.name}
                   loading="lazy"
                   width={1280}
@@ -213,7 +237,7 @@ function Home() {
                   </span>
                 </div>
                 <Button asChild className="mt-2 w-full rounded-full">
-                  <Link to="/booking" search={{ room: room.id }}>
+                  <Link to="/booking" search={{ room: room.code }}>
                     Book this room
                   </Link>
                 </Button>
@@ -310,7 +334,7 @@ function Home() {
           <p className="eyebrow">Guest reviews</p>
           <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">What families say</h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {REVIEWS.map((r) => (
+            {guestReviews.slice(0, 4).map((r) => (
               <blockquote
                 key={r.name}
                 className="lift-card rounded-3xl border bg-card p-6 shadow-soft"

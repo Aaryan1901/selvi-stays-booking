@@ -1,12 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BedDouble, Check, Users } from "lucide-react";
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ROOMS, inr } from "@/lib/hotel";
+import { listRooms } from "@/lib/hotel.functions";
+import { inr } from "@/lib/hotel";
+import { roomImages } from "@/lib/room-images";
 import { cn } from "@/lib/utils";
 
+type RoomRow = Awaited<ReturnType<typeof listRooms>>[number];
+
 export const Route = createFileRoute("/rooms")({
+  loader: () => listRooms(),
   head: () => ({
     meta: [
       { title: "Rooms & Rates — Selvi Residency, Puducherry" },
@@ -24,10 +28,18 @@ export const Route = createFileRoute("/rooms")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  errorComponent: () => (
+    <div className="mx-auto max-w-3xl px-4 pt-40 text-center">
+      <h1 className="font-display text-4xl">Rooms are loading slowly</h1>
+      <p className="mt-3 text-muted-foreground">Please refresh in a moment.</p>
+    </div>
+  ),
+  notFoundComponent: () => <div className="pt-40 text-center">Not found</div>,
   component: RoomsPage,
 });
 
-function RoomCard({ room }: { room: (typeof ROOMS)[number] }) {
+function RoomCard({ room }: { room: RoomRow }) {
+  const images = roomImages(room.image_key);
   const [active, setActive] = useState(0);
 
   return (
@@ -36,7 +48,7 @@ function RoomCard({ room }: { room: (typeof ROOMS)[number] }) {
         <div className="relative">
           <div className="aspect-4/3 overflow-hidden md:h-full">
             <img
-              src={room.images[active]}
+              src={images[active]}
               alt={`${room.name} view ${active + 1}`}
               loading="lazy"
               width={1280}
@@ -45,7 +57,7 @@ function RoomCard({ room }: { room: (typeof ROOMS)[number] }) {
             />
           </div>
           <div className="absolute bottom-4 left-4 flex gap-2">
-            {room.images.map((img, i) => (
+            {images.map((img, i) => (
               <button
                 key={img}
                 onClick={() => setActive(i)}
@@ -59,14 +71,6 @@ function RoomCard({ room }: { room: (typeof ROOMS)[number] }) {
               </button>
             ))}
           </div>
-          <Badge
-            className={cn(
-              "absolute right-4 top-4 rounded-full",
-              room.available ? "bg-card text-card-foreground" : "bg-muted text-muted-foreground",
-            )}
-          >
-            {room.available ? "Available" : "Booked out"}
-          </Badge>
         </div>
 
         <div className="flex flex-col gap-4 p-6 sm:p-8">
@@ -85,7 +89,7 @@ function RoomCard({ room }: { room: (typeof ROOMS)[number] }) {
           </div>
 
           <ul className="grid grid-cols-2 gap-2 text-sm">
-            {room.amenities.map((a) => (
+            {room.amenities.map((a: string) => (
               <li key={a} className="flex items-center gap-2">
                 <Check className="size-3.5 shrink-0 text-gold" />
                 <span className="min-w-0 truncate">{a}</span>
@@ -98,9 +102,9 @@ function RoomCard({ room }: { room: (typeof ROOMS)[number] }) {
               <span className="font-display text-3xl">{inr(room.price)}</span>
               <span className="text-sm text-muted-foreground"> / night</span>
             </p>
-            <Button asChild disabled={!room.available} className="rounded-full">
-              <Link to="/booking" search={{ room: room.id }}>
-                {room.available ? "Book Now" : "Join waitlist"}
+            <Button asChild className="rounded-full">
+              <Link to="/booking" search={{ room: room.code }}>
+                Book Now
               </Link>
             </Button>
           </div>
@@ -111,6 +115,8 @@ function RoomCard({ room }: { room: (typeof ROOMS)[number] }) {
 }
 
 function RoomsPage() {
+  const rooms = Route.useLoaderData();
+
   return (
     <div className="mx-auto max-w-6xl px-4 pb-10 pt-32 sm:px-6 sm:pt-40">
       <p className="eyebrow">Six rooms</p>
@@ -121,10 +127,11 @@ function RoomsPage() {
       </p>
 
       <div className="mt-12 space-y-8">
-        {ROOMS.map((room) => (
+        {(rooms as RoomRow[]).map((room) => (
           <RoomCard key={room.id} room={room} />
         ))}
       </div>
+
     </div>
   );
 }
