@@ -237,7 +237,7 @@ function Home() {
                   </span>
                 </div>
                 <Button asChild className="mt-2 w-full rounded-full">
-                  <Link to="/booking" search={{ room: room.id }}>
+                  <Link to="/booking" search={{ room: room.code }}>
                     Book this room
                   </Link>
                 </Button>
