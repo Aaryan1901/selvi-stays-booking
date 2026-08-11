@@ -214,7 +214,7 @@ function Home() {
             >
               <div className="relative aspect-4/3 overflow-hidden">
                 <img
-                  src={room.images[0]}
+                  src={roomImages(room.image_key)[0]}
                   alt={room.name}
                   loading="lazy"
                   width={1280}
