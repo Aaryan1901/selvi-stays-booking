@@ -135,8 +135,14 @@ function SearchBar() {
   );
 }
 
+type RoomRow = Awaited<ReturnType<typeof listRooms>>[number];
+type ReviewRow = Awaited<ReturnType<typeof listReviews>>[number];
+
 function Home() {
-  const { rooms, reviews } = Route.useLoaderData();
+  const { rooms, reviews } = Route.useLoaderData() as {
+    rooms: RoomRow[];
+    reviews: ReviewRow[];
+  };
   const featured = rooms.slice(0, 3);
   const guestReviews =
     reviews.length > 0
