@@ -17,7 +17,15 @@ import {
 } from "@/components/ui/select";
 import { HOTEL, inr } from "@/lib/hotel";
 import { roomImages } from "@/lib/room-images";
-import { checkAvailability, createBooking, listRooms, quoteBooking } from "@/lib/hotel.functions";
+import { openRazorpay } from "@/lib/razorpay";
+import {
+  checkAvailability,
+  confirmPayment,
+  createBooking,
+  listRooms,
+  quoteBooking,
+  startPayment,
+} from "@/lib/hotel.functions";
 
 type RoomRow = Awaited<ReturnType<typeof listRooms>>[number];
 
