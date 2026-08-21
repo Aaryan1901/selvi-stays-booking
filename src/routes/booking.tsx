@@ -92,6 +92,8 @@ function BookingPage() {
   const submitBooking = useServerFn(createBooking);
   const getQuote = useServerFn(quoteBooking);
   const getAvailability = useServerFn(checkAvailability);
+  const beginPayment = useServerFn(startPayment);
+  const finishPayment = useServerFn(confirmPayment);
 
   const [roomCode, setRoomCode] = useState(search.room ?? rooms[0]?.code ?? "");
   const [checkIn, setCheckIn] = useState(search.checkIn ?? today);
@@ -109,6 +111,8 @@ function BookingPage() {
   const [bookedCodes, setBookedCodes] = useState<string[]>([]);
   const [quote, setQuote] = useState<Awaited<ReturnType<typeof quoteBooking>> | null>(null);
   const [confirmed, setConfirmed] = useState<Confirmation | null>(null);
+  const [paying, setPaying] = useState(false);
+  const [paid, setPaid] = useState(false);
 
   const room = useMemo(
     () => rooms.find((r) => r.code === roomCode) ?? rooms[0],
