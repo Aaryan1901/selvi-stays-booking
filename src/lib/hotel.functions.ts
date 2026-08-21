@@ -240,6 +240,12 @@ export const startPayment = createServerFn({ method: "POST" })
       notes: { reference: booking.reference, room: booking.room_name },
     });
 
+    await supabaseAdmin
+      .from("bookings")
+      .update({ payment_order_id: order.orderId })
+      .eq("id", booking.id);
+
+
     return {
       orderId: order.orderId,
       keyId: order.keyId,
