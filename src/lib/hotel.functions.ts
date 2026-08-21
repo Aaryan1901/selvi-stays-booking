@@ -220,6 +220,70 @@ export const createBooking = createServerFn({ method: "POST" })
     return { reference, nights, ...totals, roomName: room.name };
   });
 
+export const startPayment = createServerFn({ method: "POST" })
+  .inputValidator((input) => z.object({ reference: z.string().trim().min(4).max(32) }).parse(input))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { createRazorpayOrder } = await import("@/lib/razorpay.server");
+    const { data: booking, error } = await supabaseAdmin
+      .from("bookings")
+      .select("id, reference, total, guest_name, guest_email, guest_phone, room_name, payment_status")
+      .eq("reference", data.reference)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!booking) throw new Error("Booking not found.");
+    if (booking.payment_status === "paid") throw new Error("This booking is already paid.");
+
+    const order = await createRazorpayOrder({
+      amountPaise: Math.round(booking.total * 100),
+      receipt: booking.reference,
+      notes: { reference: booking.reference, room: booking.room_name },
+    });
+
+    await supabaseAdmin
+      .from("bookings")
+      .update({ payment_order_id: order.orderId })
+      .eq("id", booking.id);
+
+
+    return {
+      orderId: order.orderId,
+      keyId: order.keyId,
+      amount: Math.round(booking.total * 100),
+      guest: {
+        name: booking.guest_name,
+        email: booking.guest_email,
+        contact: booking.guest_phone,
+      },
+      roomName: booking.room_name,
+    };
+  });
+
+export const confirmPayment = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z
+      .object({
+        reference: z.string().trim().min(4).max(32),
+        orderId: z.string().trim().min(4).max(64),
+        paymentId: z.string().trim().min(4).max(64),
+        signature: z.string().trim().min(16).max(256),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { verifyRazorpaySignature } = await import("@/lib/razorpay.server");
+    if (!verifyRazorpaySignature(data.orderId, data.paymentId, data.signature))
+      throw new Error("Payment could not be verified.");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("bookings")
+      .update({ payment_status: "paid", status: "confirmed", payment_id: data.paymentId })
+      .eq("reference", data.reference);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
 export const adminOverview = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {

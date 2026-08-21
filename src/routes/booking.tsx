@@ -17,7 +17,15 @@ import {
 } from "@/components/ui/select";
 import { HOTEL, inr } from "@/lib/hotel";
 import { roomImages } from "@/lib/room-images";
-import { checkAvailability, createBooking, listRooms, quoteBooking } from "@/lib/hotel.functions";
+import { openRazorpay } from "@/lib/razorpay";
+import {
+  checkAvailability,
+  confirmPayment,
+  createBooking,
+  listRooms,
+  quoteBooking,
+  startPayment,
+} from "@/lib/hotel.functions";
 
 type RoomRow = Awaited<ReturnType<typeof listRooms>>[number];
 
@@ -84,6 +92,8 @@ function BookingPage() {
   const submitBooking = useServerFn(createBooking);
   const getQuote = useServerFn(quoteBooking);
   const getAvailability = useServerFn(checkAvailability);
+  const beginPayment = useServerFn(startPayment);
+  const finishPayment = useServerFn(confirmPayment);
 
   const [roomCode, setRoomCode] = useState(search.room ?? rooms[0]?.code ?? "");
   const [checkIn, setCheckIn] = useState(search.checkIn ?? today);
@@ -101,6 +111,8 @@ function BookingPage() {
   const [bookedCodes, setBookedCodes] = useState<string[]>([]);
   const [quote, setQuote] = useState<Awaited<ReturnType<typeof quoteBooking>> | null>(null);
   const [confirmed, setConfirmed] = useState<Confirmation | null>(null);
+  const [paying, setPaying] = useState(false);
+  const [paid, setPaid] = useState(false);
 
   const room = useMemo(
     () => rooms.find((r) => r.code === roomCode) ?? rooms[0],
@@ -188,14 +200,69 @@ function BookingPage() {
     }
   };
 
+  const payNow = async () => {
+    if (!confirmed) return;
+    setPaying(true);
+    try {
+      const order = await beginPayment({ data: { reference: confirmed.reference } });
+      await openRazorpay({
+        key: order.keyId,
+        amount: order.amount,
+        currency: "INR",
+        name: HOTEL.name,
+        description: `${order.roomName} · ${confirmed.reference}`,
+        order_id: order.orderId,
+        prefill: {
+          name: order.guest.name,
+          email: order.guest.email,
+          contact: order.guest.contact,
+        },
+        notes: { reference: confirmed.reference },
+        theme: { color: "#1b2f5e" },
+        modal: { ondismiss: () => setPaying(false) },
+        handler: (res) => {
+          void finishPayment({
+            data: {
+              reference: confirmed.reference,
+              orderId: res.razorpay_order_id,
+              paymentId: res.razorpay_payment_id,
+              signature: res.razorpay_signature,
+            },
+          })
+            .then(() => {
+              setPaid(true);
+              toast.success("Payment received", {
+                description: `Your stay is confirmed, reference ${confirmed.reference}.`,
+              });
+            })
+            .catch((err: unknown) =>
+              toast.error("We couldn't verify that payment", {
+                description: err instanceof Error ? err.message : "Please contact reception.",
+              }),
+            )
+            .finally(() => setPaying(false));
+        },
+      });
+    } catch (err) {
+      setPaying(false);
+      toast.error("Payment could not be started", {
+        description: err instanceof Error ? err.message : "Please try again.",
+      });
+    }
+  };
+
   if (confirmed) {
     return (
       <div className="mx-auto max-w-2xl px-4 pb-10 pt-32 sm:px-6 sm:pt-40">
         <div className="glass-panel rise-in rounded-3xl p-8 text-center sm:p-12">
           <CheckCircle2 className="mx-auto size-14 text-gold" />
-          <h1 className="mt-6 font-display text-4xl">Booking request confirmed</h1>
+          <h1 className="mt-6 font-display text-4xl">
+            {paid ? "Payment received" : "Booking request confirmed"}
+          </h1>
           <p className="mt-3 text-muted-foreground">
-            We've noted your stay at {HOTEL.name}. Reception will call {phone} to confirm.
+            {paid
+              ? `Your stay at ${HOTEL.name} is fully confirmed. See you soon!`
+              : `We've held your stay at ${HOTEL.name}. Pay now to confirm instantly, or reception will call ${phone}.`}
           </p>
           <dl className="mt-8 space-y-3 rounded-2xl border bg-card p-6 text-left text-sm">
             <Row label="Reference" value={confirmed.reference} />
@@ -208,10 +275,19 @@ function BookingPage() {
             {confirmed.discount > 0 && (
               <Row label="Discount" value={`− ${inr(confirmed.discount)}`} />
             )}
-            <Row label="Amount payable" value={inr(confirmed.total)} strong />
+            <Row
+              label={paid ? "Amount paid" : "Amount payable"}
+              value={inr(confirmed.total)}
+              strong
+            />
           </dl>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button asChild className="rounded-full">
+            {!paid && (
+              <Button onClick={payNow} disabled={paying} size="lg" className="rounded-full">
+                {paying ? "Opening payment…" : `Pay ${inr(confirmed.total)} securely`}
+              </Button>
+            )}
+            <Button asChild variant={paid ? "default" : "outline"} className="rounded-full">
               <Link to="/">Back to home</Link>
             </Button>
             <Button asChild variant="outline" className="rounded-full">
@@ -220,6 +296,11 @@ function BookingPage() {
               </a>
             </Button>
           </div>
+          {!paid && (
+            <p className="mt-5 text-xs text-muted-foreground">
+              Cards, UPI, net banking and wallets via Razorpay. You can also pay at the hotel.
+            </p>
+          )}
         </div>
       </div>
     );
@@ -363,8 +444,8 @@ function BookingPage() {
             {pending ? "Saving…" : "Confirm booking"}
           </Button>
           <p className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-            <ShieldCheck className="size-3.5 text-gold" /> Secure online payment is being set up —
-            for now reception confirms by phone.
+            <ShieldCheck className="size-3.5 text-gold" /> Secure payment by Razorpay — UPI, cards,
+            net banking. You can also choose to pay at the hotel.
           </p>
         </form>
 
