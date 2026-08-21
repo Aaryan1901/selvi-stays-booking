@@ -1,0 +1,1 @@
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS payment_id text, ADD COLUMN IF NOT EXISTS payment_order_id text;
