@@ -444,8 +444,8 @@ function BookingPage() {
             {pending ? "Saving…" : "Confirm booking"}
           </Button>
           <p className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-            <ShieldCheck className="size-3.5 text-gold" /> Secure online payment is being set up —
-            for now reception confirms by phone.
+            <ShieldCheck className="size-3.5 text-gold" /> Secure payment by Razorpay — UPI, cards,
+            net banking. You can also choose to pay at the hotel.
           </p>
         </form>
 
