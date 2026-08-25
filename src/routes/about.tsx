@@ -10,12 +10,12 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "The story behind Selvi Residency: a six-room family-run stay in Muthialpet, Puducherry built on clean rooms and fair pricing.",
+          "The story behind Selvi Residency: a two-room family-run stay in Muthialpet, Puducherry built on clean rooms and fair pricing.",
       },
       { property: "og:title", content: "About Selvi Residency" },
       {
         property: "og:description",
-        content: "A family-run, six-room residency in Muthialpet, Puducherry.",
+        content: "A family-run, two-room residency in Muthialpet, Puducherry.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -39,7 +39,7 @@ function AboutPage() {
             <p className="mt-3 text-muted-foreground">
               Selvi Residency began as a family home on a quiet lane in Muthialpet. As friends and
               relatives kept arriving for temple visits, weddings and beach weekends, the house grew
-              into six rooms — and then into a small residency run with the same instincts: clean
+              into a small two-room residency, run with the same instincts: clean
               linen, hot water on time and someone at the desk who knows your name.
             </p>
           </section>
