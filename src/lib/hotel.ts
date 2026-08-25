@@ -34,34 +34,11 @@ export type Room = {
 export const ROOMS: Room[] = [
   {
     id: "101",
-    name: "Room 101 · Standard Double",
-    price: 1800,
-    occupancy: 2,
-    beds: "1 Double Bed",
-    images: [roomDeluxe, roomStandard],
-    amenities: ["AC", "Free WiFi", "TV", "Attached Bathroom", "Hot Water"],
-    available: true,
-    description:
-      "A compact, spotless double room with everything a short stay needs.",
-  },
-  {
-    id: "102",
-    name: "Room 102 · Standard Twin",
-    price: 1900,
-    occupancy: 2,
-    beds: "2 Single Beds",
-    images: [roomStandard, roomDeluxe],
-    amenities: ["AC", "Free WiFi", "TV", "Attached Bathroom", "Hot Water"],
-    available: true,
-    description: "Twin beds and a quiet street-facing window, ideal for friends.",
-  },
-  {
-    id: "103",
-    name: "Room 103 · Deluxe Double",
-    price: 2200,
+    name: "Room 101 · Deluxe Double",
+    price: 2500,
     occupancy: 3,
     beds: "1 Double + 1 Sofa Bed",
-    images: [roomDeluxe, roomFamily],
+    images: [roomDeluxe, roomStandard],
     amenities: [
       "AC",
       "Free WiFi",
@@ -71,42 +48,14 @@ export const ROOMS: Room[] = [
       "Work Desk",
     ],
     available: true,
-    description: "Extra floor space, a work desk and a warm reading corner.",
+    description:
+      "A bright, air-conditioned deluxe double with a work corner, smart TV and 24x7 hot water.",
   },
   {
-    id: "201",
-    name: "Room 201 · Deluxe Balcony",
-    price: 2400,
-    occupancy: 3,
-    beds: "1 Queen Bed",
-    images: [roomFamily, roomDeluxe],
-    amenities: ["AC", "Free WiFi", "Smart TV", "Balcony", "Hot Water", "Mini Fridge"],
-    available: false,
-    description: "Private balcony overlooking the palm-lined lane below.",
-  },
-  {
-    id: "202",
-    name: "Room 202 · Family Suite",
-    price: 3200,
+    id: "102",
+    name: "Room 102 · Family Room",
+    price: 2500,
     occupancy: 4,
-    beds: "1 Double + 2 Single Beds",
-    images: [roomFamily, roomStandard],
-    amenities: [
-      "AC",
-      "Free WiFi",
-      "Smart TV",
-      "Attached Bathroom",
-      "Hot Water",
-      "Mini Fridge",
-    ],
-    available: true,
-    description: "Our largest room, built for families travelling with children.",
-  },
-  {
-    id: "203",
-    name: "Room 203 · Family Deluxe",
-    price: 3500,
-    occupancy: 5,
     beds: "2 Double Beds",
     images: [roomFamily, lobby],
     amenities: [
@@ -116,12 +65,13 @@ export const ROOMS: Room[] = [
       "Balcony",
       "Hot Water",
       "Mini Fridge",
-      "Extra Bed",
     ],
     available: true,
-    description: "Top-floor suite with two double beds and a sunlit balcony.",
+    description:
+      "Our spacious family room with two double beds, a balcony and a mini fridge.",
   },
 ];
+
 
 export const AMENITIES = [
   "Free WiFi",
