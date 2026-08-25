@@ -85,7 +85,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Direct booking for Selvi Residency, a six-room family stay in Muthialpet, Puducherry.",
+          "Direct booking for Selvi Residency, a family-run stay in Muthialpet, Puducherry.",
       },
       { name: "theme-color", content: "#16264a" },
       { property: "og:type", content: "website" },

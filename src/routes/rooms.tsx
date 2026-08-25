@@ -17,12 +17,12 @@ export const Route = createFileRoute("/rooms")({
       {
         name: "description",
         content:
-          "All six rooms at Selvi Residency: standard, deluxe and family suites from ₹1800 per night with AC, WiFi, TV and hot water.",
+          "Both rooms at Selvi Residency — a deluxe double and a family room — at a flat ₹2500 per night with AC, WiFi, smart TV and 24x7 hot water.",
       },
       { property: "og:title", content: "Rooms & Rates — Selvi Residency" },
       {
         property: "og:description",
-        content: "Standard, deluxe and family rooms in Muthialpet, Puducherry from ₹1800/night.",
+        content: "Deluxe double and family rooms in Muthialpet, Puducherry at a flat ₹2500/night.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -119,11 +119,12 @@ function RoomsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-10 pt-32 sm:px-6 sm:pt-40">
-      <p className="eyebrow">Six rooms</p>
+      <p className="eyebrow">Two rooms · flat ₹2500 / night</p>
       <h1 className="gold-rule mt-2 font-display text-5xl sm:text-6xl">Rooms &amp; rates</h1>
       <p className="mt-6 max-w-xl text-muted-foreground">
-        Every room is air-conditioned, cleaned daily and priced with GST shown transparently at
-        checkout. Rates below are per night for the room.
+        We keep just two rooms so every stay gets full attention. Both are air-conditioned,
+        cleaned daily and priced at a flat ₹2500 per night, with 12% GST shown transparently at
+        checkout — no seasonal surge, no commission.
       </p>
 
       <div className="mt-12 space-y-8">

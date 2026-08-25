@@ -38,11 +38,11 @@ export const Route = createFileRoute("/")({
   notFoundComponent: () => <div className="pt-40 text-center">Not found</div>,
   head: () => ({
     meta: [
-      { title: "Selvi Residency — Hotel in Muthialpet, Puducherry" },
+      { title: "Selvi Residency — Book a Room in Puducherry from ₹2500" },
       {
         name: "description",
         content:
-          "Book Selvi Residency directly: 6 clean, AC family rooms in Muthialpet, Puducherry from ₹1800/night. No commission, instant confirmation.",
+          "Book Selvi Residency directly: two spotless AC rooms in Muthialpet, Puducherry at a flat ₹2500/night. No commission, instant confirmation.",
       },
       { property: "og:title", content: "Selvi Residency — Hotel in Muthialpet, Puducherry" },
       {
@@ -167,8 +167,8 @@ function Home() {
               {HOTEL.name}
             </h1>
             <p className="mt-5 max-w-lg text-base opacity-85 sm:text-lg">
-              Six thoughtfully kept rooms, warm hospitality and a five-minute ride to
-              Promenade Beach. Book direct — never a commission.
+              Two thoughtfully kept rooms at a flat ₹2500 a night, warm hospitality and a
+              five-minute ride to Promenade Beach. Book direct — never a commission.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" className="rounded-full bg-gold text-primary hover:bg-gold/90">
@@ -201,12 +201,12 @@ function Home() {
           </div>
           <Button asChild variant="ghost" className="rounded-full">
             <Link to="/rooms" className="gap-2">
-              All 6 rooms <ArrowRight className="size-4" />
+              Both rooms <ArrowRight className="size-4" />
             </Link>
           </Button>
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
           {featured.map((room) => (
             <article
               key={room.id}
@@ -253,7 +253,7 @@ function Home() {
           <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">
             Small enough to care, run well enough to trust
           </h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
             {[
               {
                 title: "Direct booking, honest price",
@@ -357,7 +357,7 @@ function Home() {
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <p className="eyebrow">Nearby</p>
         <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">Attractions around us</h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
           {ATTRACTIONS.map((a) => (
             <article key={a.name} className="lift-card group overflow-hidden rounded-3xl border bg-card shadow-soft">
               <div className="aspect-4/3 overflow-hidden">
