@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { CheckCircle2, ShieldCheck, TicketPercent } from "lucide-react";
+import { Building2, CheckCircle2, ShieldCheck, TicketPercent } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -451,14 +451,13 @@ function BookingPage() {
 
         <aside className="h-fit lg:sticky lg:top-28">
           <div className="glass-panel overflow-hidden rounded-3xl">
-            <img
-              src={roomImages(room?.image_key ?? "deluxe")[0]}
-              alt={room?.name ?? "Room"}
-              loading="lazy"
-              width={1280}
-              height={960}
-              className="aspect-4/3 w-full object-cover"
-            />
+            <div className="grid aspect-4/3 place-items-center bg-secondary p-8 text-center">
+              <div>
+                <Building2 className="mx-auto size-10 text-gold" />
+                <p className="mt-3 font-display text-xl">Interior photos coming soon</p>
+                <p className="mt-1 text-xs text-muted-foreground">Authentic room images will be added shortly</p>
+              </div>
+            </div>
             <div className="space-y-4 p-6">
               <h2 className="font-display text-2xl">{room?.name}</h2>
               <dl className="space-y-2.5 text-sm">

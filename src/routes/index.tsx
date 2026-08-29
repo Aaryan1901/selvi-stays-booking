@@ -6,6 +6,8 @@ import {
   Car,
   Cctv,
   Coffee,
+  Building2,
+  MapPin,
   ShieldCheck,
   Snowflake,
   Sparkles,
@@ -19,10 +21,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import heroImage from "@/assets/hero-exterior.jpg";
 import { AMENITIES, ATTRACTIONS, GALLERY, HOTEL, REVIEWS, inr } from "@/lib/hotel";
 import { listRooms, listReviews } from "@/lib/hotel.functions";
 import { roomImages } from "@/lib/room-images";
+import selviExterior from "@/assets/selvi-exterior-street.jpeg.asset.json";
 
 export const Route = createFileRoute("/")({
   loader: async () => ({
@@ -153,7 +155,7 @@ function Home() {
     <>
       <section className="relative min-h-[92svh] w-full overflow-hidden">
         <img
-          src={heroImage}
+          src={selviExterior.url}
           alt="Selvi Residency lit up at dusk with palm trees along the street"
           width={1920}
           height={1088}
@@ -212,15 +214,12 @@ function Home() {
               key={room.id}
               className="lift-card overflow-hidden rounded-3xl border bg-card shadow-soft"
             >
-              <div className="relative aspect-4/3 overflow-hidden">
-                <img
-                  src={roomImages(room.image_key)[0]}
-                  alt={room.name}
-                  loading="lazy"
-                  width={1280}
-                  height={960}
-                  className="size-full object-cover transition-transform duration-700 hover:scale-105"
-                />
+              <div className="relative grid aspect-4/3 place-items-center overflow-hidden bg-secondary">
+                <div className="text-center">
+                  <Building2 className="mx-auto size-10 text-gold" />
+                  <p className="mt-3 font-display text-xl">Interior photos coming soon</p>
+                  <p className="mt-1 text-xs text-muted-foreground">Real room views will be added shortly</p>
+                </div>
                 <Badge className="absolute left-4 top-4 rounded-full bg-card text-card-foreground">
                   {inr(room.price)} / night
                 </Badge>
@@ -289,7 +288,7 @@ function Home() {
           <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">Inside the residency</h2>
         </div>
         <div className="mt-10 flex w-max marquee-track gap-5 px-4">
-          {[...GALLERY, ...GALLERY].map((item, i) => (
+           {[...GALLERY, ...GALLERY].map((item, i) => (
             <figure
               key={`${item.label}-${i}`}
               className="w-64 shrink-0 overflow-hidden rounded-3xl border bg-card shadow-soft sm:w-80"
@@ -359,26 +358,17 @@ function Home() {
         <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">Attractions around us</h2>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {ATTRACTIONS.map((a) => (
-            <article key={a.name} className="lift-card group overflow-hidden rounded-3xl border bg-card shadow-soft">
-              <div className="aspect-4/3 overflow-hidden">
-                <img
-                  src={a.image}
-                  alt={a.name}
-                  loading="lazy"
-                  width={1280}
-                  height={960}
-                  className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+            <article key={a.name} className="lift-card rounded-3xl border bg-card p-6 shadow-soft">
+              <div className="flex items-start justify-between gap-4">
+                <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-gold-soft text-primary">
+                  <MapPin className="size-5" />
+                </span>
+                <span className="shrink-0 pt-2 text-xs uppercase tracking-widest text-gold">
+                  {a.distance}
+                </span>
               </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between gap-3">
-                  <h3 className="font-display text-2xl">{a.name}</h3>
-                  <span className="shrink-0 text-xs uppercase tracking-widest text-gold">
-                    {a.distance}
-                  </span>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{a.note}</p>
-              </div>
+              <h3 className="mt-6 font-display text-2xl">{a.name}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{a.note}</p>
             </article>
           ))}
         </div>

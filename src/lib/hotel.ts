@@ -1,10 +1,12 @@
-import roomDeluxe from "@/assets/room-deluxe.jpg";
-import roomStandard from "@/assets/room-standard.jpg";
-import roomFamily from "@/assets/room-family.jpg";
-import lobby from "@/assets/lobby.jpg";
-import exterior from "@/assets/hero-exterior.jpg";
-import frenchQuarter from "@/assets/nearby-french-quarter.jpg";
-import beach from "@/assets/nearby-beach.jpg";
+import selviExterior from "@/assets/selvi-exterior-street.jpeg.asset.json";
+import selviSign from "@/assets/selvi-sign.jpeg.asset.json";
+import selviFacade from "@/assets/selvi-facade.jpeg.asset.json";
+
+const propertyPhotos = {
+  exterior: selviExterior.url,
+  sign: selviSign.url,
+  facade: selviFacade.url,
+};
 
 export const HOTEL = {
   name: "Selvi Residency",
@@ -38,7 +40,7 @@ export const ROOMS: Room[] = [
     price: 2500,
     occupancy: 3,
     beds: "1 Double + 1 Sofa Bed",
-    images: [roomDeluxe, roomStandard],
+    images: [],
     amenities: [
       "AC",
       "Free WiFi",
@@ -57,7 +59,7 @@ export const ROOMS: Room[] = [
     price: 2500,
     occupancy: 4,
     beds: "2 Double Beds",
-    images: [roomFamily, lobby],
+    images: [],
     amenities: [
       "AC",
       "Free WiFi",
@@ -117,31 +119,24 @@ export const ATTRACTIONS = [
   {
     name: "Promenade Beach",
     distance: "1.2 km",
-    image: beach,
     note: "Sunrise walks along the rocky shoreline.",
   },
   {
     name: "French Quarter",
     distance: "1.8 km",
-    image: frenchQuarter,
     note: "Mustard walls, bougainvillea and cafés.",
   },
   {
     name: "Sri Aurobindo Ashram",
     distance: "2.0 km",
-    image: lobby,
     note: "A quiet landmark at the centre of town.",
   },
 ];
 
 export const GALLERY = [
-  { src: exterior, label: "Exterior" },
-  { src: lobby, label: "Reception" },
-  { src: roomDeluxe, label: "Deluxe Room" },
-  { src: roomStandard, label: "Standard Twin" },
-  { src: roomFamily, label: "Family Suite" },
-  { src: frenchQuarter, label: "French Quarter" },
-  { src: beach, label: "Promenade Beach" },
+  { src: propertyPhotos.exterior, label: "Street view" },
+  { src: propertyPhotos.facade, label: "Residency facade" },
+  { src: propertyPhotos.sign, label: "Selvi Residency sign" },
 ];
 
 export const inr = (value: number) =>
