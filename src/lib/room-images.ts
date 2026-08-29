@@ -8,4 +8,5 @@ export const ROOM_IMAGES: Record<string, string[]> = {
   family: [selviFacade.url, selviSign.url],
 };
 
-export const roomImages = (key: string): string[] => ROOM_IMAGES[key] ?? ROOM_IMAGES["deluxe"];
+export const roomImages = (key: string): string[] =>
+  ROOM_IMAGES[key] ?? ROOM_IMAGES["deluxe"] ?? [];
