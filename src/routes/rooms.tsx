@@ -49,7 +49,7 @@ function RoomCard({ room }: { room: RoomRow }) {
           <div className="aspect-4/3 overflow-hidden md:h-full">
             <img
               src={images[active]}
-              alt={`${room.name} view ${active + 1}`}
+              alt={`Selvi Residency exterior photo ${active + 1}`}
               loading="lazy"
               width={1280}
               height={960}

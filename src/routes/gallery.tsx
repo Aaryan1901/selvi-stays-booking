@@ -8,12 +8,12 @@ export const Route = createFileRoute("/gallery")({
       {
         name: "description",
         content:
-          "Photos of Selvi Residency: rooms, reception, exterior and the Puducherry landmarks a short walk away.",
+          "See the real Selvi Residency exterior, colorful facade and roadside sign in Muthialpet, Puducherry.",
       },
       { property: "og:title", content: "Photo Gallery — Selvi Residency" },
       {
         property: "og:description",
-        content: "Rooms, lobby, exterior and nearby places around Muthialpet, Puducherry.",
+        content: "The real exterior, facade and Selvi Residency sign around Muthialpet, Puducherry.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import lobby from "@/assets/lobby.jpg";
+import selviFacade from "@/assets/selvi-facade.jpeg.asset.json";
 import { AMENITIES, HOTEL } from "@/lib/hotel";
 
 export const Route = createFileRoute("/about")({
@@ -67,8 +67,8 @@ function AboutPage() {
 
         <aside className="space-y-6">
           <img
-            src={lobby}
-            alt="Reception desk at Selvi Residency"
+            src={selviFacade.url}
+            alt="The colorful facade of Selvi Residency in Muthialpet"
             loading="lazy"
             width={1280}
             height={960}

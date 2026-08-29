@@ -1,12 +1,11 @@
-import roomDeluxe from "@/assets/room-deluxe.jpg";
-import roomStandard from "@/assets/room-standard.jpg";
-import roomFamily from "@/assets/room-family.jpg";
-import lobby from "@/assets/lobby.jpg";
+import selviExterior from "@/assets/selvi-exterior-street.jpeg.asset.json";
+import selviSign from "@/assets/selvi-sign.jpeg.asset.json";
+import selviFacade from "@/assets/selvi-facade.jpeg.asset.json";
 
 export const ROOM_IMAGES: Record<string, string[]> = {
-  standard: [roomStandard, roomDeluxe],
-  deluxe: [roomDeluxe, roomFamily],
-  family: [roomFamily, lobby],
+  standard: [selviExterior.url, selviFacade.url],
+  deluxe: [selviFacade.url, selviExterior.url],
+  family: [selviFacade.url, selviSign.url],
 };
 
-export const roomImages = (key: string) => ROOM_IMAGES[key] ?? ROOM_IMAGES["deluxe"]!;
+export const roomImages = (key: string) => ROOM_IMAGES[key] ?? ROOM_IMAGES.deluxe;
