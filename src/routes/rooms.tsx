@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BedDouble, Check, Users } from "lucide-react";
+import { BedDouble, Building2, Check, Users } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { listRooms } from "@/lib/hotel.functions";
@@ -45,32 +45,42 @@ function RoomCard({ room }: { room: RoomRow }) {
   return (
     <article className="lift-card overflow-hidden rounded-3xl border bg-card shadow-soft">
       <div className="grid md:grid-cols-2">
-        <div className="relative">
-          <div className="aspect-4/3 overflow-hidden md:h-full">
-            <img
-               src={images[active] ?? images[0] ?? ""}
-              alt={`Selvi Residency exterior photo ${active + 1}`}
-              loading="lazy"
-              width={1280}
-              height={960}
-              className="size-full object-cover transition-opacity duration-500"
-            />
-          </div>
-          <div className="absolute bottom-4 left-4 flex gap-2">
-            {images.map((img, i) => (
-              <button
-                key={img}
-                onClick={() => setActive(i)}
-                aria-label={`Show photo ${i + 1} of ${room.name}`}
-                className={cn(
-                  "size-12 overflow-hidden rounded-xl border-2 transition-all",
-                  i === active ? "border-gold" : "border-transparent opacity-70 hover:opacity-100",
-                )}
-              >
-                <img src={img} alt="" className="size-full object-cover" />
-              </button>
-            ))}
-          </div>
+        <div className="relative grid aspect-4/3 place-items-center bg-secondary md:h-full">
+          {images.length > 0 ? (
+            <>
+              <img
+                src={images[active] ?? images[0] ?? ""}
+                alt={`${room.name} interior view ${active + 1}`}
+                loading="lazy"
+                width={1280}
+                height={960}
+                className="size-full object-cover transition-opacity duration-500"
+              />
+              <div className="absolute bottom-4 left-4 flex gap-2">
+                {images.map((img, i) => (
+                  <button
+                    key={img}
+                    onClick={() => setActive(i)}
+                    aria-label={`Show photo ${i + 1} of ${room.name}`}
+                    className={cn(
+                      "size-12 overflow-hidden rounded-xl border-2 transition-all",
+                      i === active ? "border-gold" : "border-transparent opacity-70 hover:opacity-100",
+                    )}
+                  >
+                    <img src={img} alt="" className="size-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="p-8 text-center">
+              <Building2 className="mx-auto size-12 text-gold" />
+              <p className="mt-4 font-display text-2xl">Interior photos coming soon</p>
+              <p className="mt-2 max-w-xs text-sm text-muted-foreground">
+                We are preparing the real room views for this listing.
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-4 p-6 sm:p-8">

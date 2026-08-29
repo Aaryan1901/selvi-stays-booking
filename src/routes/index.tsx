@@ -6,6 +6,7 @@ import {
   Car,
   Cctv,
   Coffee,
+  Building2,
   MapPin,
   ShieldCheck,
   Snowflake,
@@ -213,15 +214,12 @@ function Home() {
               key={room.id}
               className="lift-card overflow-hidden rounded-3xl border bg-card shadow-soft"
             >
-              <div className="relative aspect-4/3 overflow-hidden">
-                <img
-                  src={roomImages(room.image_key)[0] ?? ""}
-                  alt={room.name}
-                  loading="lazy"
-                  width={1280}
-                  height={960}
-                  className="size-full object-cover transition-transform duration-700 hover:scale-105"
-                />
+              <div className="relative grid aspect-4/3 place-items-center overflow-hidden bg-secondary">
+                <div className="text-center">
+                  <Building2 className="mx-auto size-10 text-gold" />
+                  <p className="mt-3 font-display text-xl">Interior photos coming soon</p>
+                  <p className="mt-1 text-xs text-muted-foreground">Real room views will be added shortly</p>
+                </div>
                 <Badge className="absolute left-4 top-4 rounded-full bg-card text-card-foreground">
                   {inr(room.price)} / night
                 </Badge>

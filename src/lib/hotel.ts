@@ -40,7 +40,7 @@ export const ROOMS: Room[] = [
     price: 2500,
     occupancy: 3,
     beds: "1 Double + 1 Sofa Bed",
-    images: [propertyPhotos.exterior, propertyPhotos.facade],
+    images: [],
     amenities: [
       "AC",
       "Free WiFi",
@@ -59,7 +59,7 @@ export const ROOMS: Room[] = [
     price: 2500,
     occupancy: 4,
     beds: "2 Double Beds",
-    images: [propertyPhotos.facade, propertyPhotos.sign],
+    images: [],
     amenities: [
       "AC",
       "Free WiFi",

@@ -1,12 +1,5 @@
-import selviExterior from "@/assets/selvi-exterior-street.jpeg.asset.json";
-import selviSign from "@/assets/selvi-sign.jpeg.asset.json";
-import selviFacade from "@/assets/selvi-facade.jpeg.asset.json";
-
-export const ROOM_IMAGES: Record<string, string[]> = {
-  standard: [selviExterior.url, selviFacade.url],
-  deluxe: [selviFacade.url, selviExterior.url],
-  family: [selviFacade.url, selviSign.url],
-};
+// Interior photos will be added when the room images are available.
+export const ROOM_IMAGES: Record<string, string[]> = {};
 
 export const roomImages = (key: string): string[] =>
   ROOM_IMAGES[key] ?? ROOM_IMAGES["deluxe"] ?? [];
