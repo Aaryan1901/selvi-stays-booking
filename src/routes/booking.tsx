@@ -452,7 +452,7 @@ function BookingPage() {
         <aside className="h-fit lg:sticky lg:top-28">
           <div className="glass-panel overflow-hidden rounded-3xl">
             <img
-              src={roomImages(room?.image_key ?? "deluxe")[0]}
+              src={roomImages(room?.image_key ?? "deluxe")[0] ?? ""}
               alt={room?.name ?? "Room"}
               loading="lazy"
               width={1280}
