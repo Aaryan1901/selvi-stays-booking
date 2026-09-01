@@ -4,7 +4,7 @@ import { HOTEL } from "@/lib/hotel";
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t bg-primary text-primary-foreground">
+    <footer className="mt-24 border-t bg-primary text-primary-foreground [&_.eyebrow]:text-primary-foreground/70">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
         <div>
           <h3 className="font-display text-3xl">{HOTEL.name}</h3>

@@ -8,6 +8,7 @@ import {
   Coffee,
   Building2,
   MapPin,
+  Navigation,
   ShieldCheck,
   Snowflake,
   Sparkles,
@@ -153,45 +154,64 @@ function Home() {
 
   return (
     <>
-      <section className="relative min-h-[92svh] w-full overflow-hidden">
+      <section className="relative min-h-[94svh] w-full overflow-hidden bg-primary">
         <img
           src={selviExterior.url}
-          alt="Selvi Residency lit up at dusk with palm trees along the street"
+          alt="The colorful Selvi Residency exterior in Muthialpet, Puducherry"
           width={1920}
           height={1088}
-          className="absolute inset-0 size-full object-cover"
+          className="absolute inset-0 size-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-linear-to-b from-primary/75 via-primary/45 to-primary/85" />
-        <div className="relative mx-auto flex min-h-[92svh] max-w-7xl flex-col justify-end px-4 pb-12 pt-32 sm:px-6 sm:pb-16">
+        <div className="absolute inset-0 bg-linear-to-b from-primary/75 via-primary/30 to-primary/90" />
+        <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-french-blue via-card to-french-red" />
+        <div className="relative mx-auto flex min-h-[94svh] max-w-7xl flex-col justify-end px-4 pb-8 pt-32 sm:px-6 sm:pb-12">
           <div className="rise-in max-w-2xl text-primary-foreground">
-            <p className="eyebrow">Muthialpet · Puducherry</p>
+            <p className="eyebrow text-primary-foreground/80">Muthialpet · Puducherry</p>
             <h1 className="mt-4 font-display text-5xl leading-[1.05] sm:text-7xl">
               {HOTEL.name}
             </h1>
-            <p className="mt-5 max-w-lg text-base opacity-85 sm:text-lg">
-              Two thoughtfully kept rooms at a flat ₹2500 a night, warm hospitality and a
-              five-minute ride to Promenade Beach. Book direct — never a commission.
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
+              Two thoughtfully kept rooms, warm local hospitality and an easy base for discovering
+              Pondicherry. Stay directly with us from <strong className="font-semibold text-primary-foreground">₹2500 per night</strong>.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="rounded-full bg-gold text-primary hover:bg-gold/90">
+              <Button asChild size="lg" className="rounded-full bg-french-red text-primary-foreground shadow-lg hover:bg-french-red/90">
                 <Link to="/booking" className="gap-2">
-                  Book Now <ArrowRight className="size-4" />
+                  Check availability <ArrowRight className="size-4" />
                 </Link>
               </Button>
               <Button
                 asChild
                 size="lg"
                 variant="outline"
-                className="rounded-full border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10"
+                 className="rounded-full border-primary-foreground/60 bg-primary/20 text-primary-foreground hover:bg-primary-foreground/15"
               >
                 <Link to="/rooms">View rooms</Link>
               </Button>
             </div>
           </div>
 
-          <div className="mt-10">
+          <div className="mt-10 sm:mt-12">
             <SearchBar />
           </div>
+        </div>
+      </section>
+
+      <section className="border-b bg-card">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-7 sm:grid-cols-3 sm:px-6">
+          {[
+            { label: "Direct rate", value: "₹2500 / night", note: "Same price for both rooms" },
+            { label: "Ideal for", value: "Families & couples", note: "Quiet, residential setting" },
+            { label: "Nearby", value: "Promenade Beach", note: "A short ride from the coast" },
+          ].map((item) => (
+            <div key={item.label} className="flex items-center gap-4 border-l-2 border-french-red pl-4">
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{item.label}</p>
+                <p className="mt-1 font-display text-2xl text-foreground">{item.value}</p>
+                <p className="text-sm text-muted-foreground">{item.note}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -199,7 +219,11 @@ function Home() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="eyebrow">Stay with us</p>
-            <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">Featured rooms</h2>
+            <h2 className="tricolor-rule mt-2 font-display text-4xl sm:text-5xl">Two rooms, thoughtfully kept</h2>
+            <p className="mt-4 max-w-2xl text-muted-foreground">
+              Choose the room that suits your trip. Both are available at a transparent flat rate of
+              <span className="font-semibold text-foreground"> ₹2500 per night</span>, before GST.
+            </p>
           </div>
           <Button asChild variant="ghost" className="rounded-full">
             <Link to="/rooms" className="gap-2">
@@ -209,19 +233,19 @@ function Home() {
         </div>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {featured.map((room) => (
+           {featured.map((room) => (
             <article
               key={room.id}
               className="lift-card overflow-hidden rounded-3xl border bg-card shadow-soft"
             >
               <div className="relative grid aspect-4/3 place-items-center overflow-hidden bg-secondary">
-                <div className="text-center">
+                <div className="px-6 text-center">
                   <Building2 className="mx-auto size-10 text-gold" />
                   <p className="mt-3 font-display text-xl">Interior photos coming soon</p>
-                  <p className="mt-1 text-xs text-muted-foreground">Real room views will be added shortly</p>
+                  <p className="mt-1 text-xs text-muted-foreground">Authentic room photos will be added shortly</p>
                 </div>
                 <Badge className="absolute left-4 top-4 rounded-full bg-card text-card-foreground">
-                  {inr(room.price)} / night
+                   {inr(room.price)} / night
                 </Badge>
               </div>
               <div className="space-y-3 p-6">
@@ -246,10 +270,10 @@ function Home() {
         </div>
       </section>
 
-      <section className="border-y bg-secondary/60 py-20">
+       <section className="border-y bg-secondary/60 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <p className="eyebrow">Why Selvi Residency</p>
-          <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">
+           <h2 className="tricolor-rule mt-2 font-display text-4xl sm:text-5xl">
             Small enough to care, run well enough to trust
           </h2>
           <div className="mt-10 grid gap-6 md:grid-cols-2">
@@ -285,7 +309,7 @@ function Home() {
       <section className="overflow-hidden py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <p className="eyebrow">Gallery</p>
-          <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">Inside the residency</h2>
+           <h2 className="tricolor-rule mt-2 font-display text-4xl sm:text-5xl">Inside the residency</h2>
         </div>
         <div className="mt-10 flex w-max marquee-track gap-5 px-4">
            {[...GALLERY, ...GALLERY].map((item, i) => (
@@ -311,7 +335,7 @@ function Home() {
 
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
         <p className="eyebrow">Amenities</p>
-        <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">Included with every stay</h2>
+         <h2 className="tricolor-rule mt-2 font-display text-4xl sm:text-5xl">Included with every stay</h2>
         <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {AMENITIES.map((a) => {
             const Icon = amenityIcons[a] ?? Sparkles;
@@ -331,7 +355,7 @@ function Home() {
       <section className="border-y bg-secondary/60 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <p className="eyebrow">Guest reviews</p>
-          <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">What families say</h2>
+           <h2 className="tricolor-rule mt-2 font-display text-4xl sm:text-5xl">What families say</h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {guestReviews.slice(0, 4).map((r) => (
               <blockquote
@@ -355,7 +379,7 @@ function Home() {
 
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <p className="eyebrow">Nearby</p>
-        <h2 className="gold-rule mt-2 font-display text-4xl sm:text-5xl">Attractions around us</h2>
+         <h2 className="tricolor-rule mt-2 font-display text-4xl sm:text-5xl">Pondicherry, close at hand</h2>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {ATTRACTIONS.map((a) => (
             <article key={a.name} className="lift-card rounded-3xl border bg-card p-6 shadow-soft">
@@ -374,16 +398,35 @@ function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
-        <div className="overflow-hidden rounded-3xl border shadow-soft">
-          <iframe
-            title="Selvi Residency location on Google Maps"
-            src={HOTEL.mapEmbed}
-            loading="lazy"
-            className="h-80 w-full border-0 sm:h-96"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
+       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
+         <div className="grid overflow-hidden rounded-3xl border bg-card shadow-soft lg:grid-cols-[0.8fr_1.6fr]">
+           <div className="flex flex-col justify-center p-7 sm:p-10">
+             <p className="eyebrow">Find us</p>
+             <h2 className="tricolor-rule mt-2 font-display text-4xl">Your base in Muthialpet</h2>
+             <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
+               Settle into a welcoming neighborhood stay, then head out for the promenade, French
+               Quarter cafés and the city’s spiritual landmarks.
+             </p>
+             <p className="mt-5 flex items-start gap-2 text-sm text-foreground">
+               <Navigation className="mt-0.5 size-4 shrink-0 text-french-red" />
+               <span>{HOTEL.address}</span>
+             </p>
+             <Button asChild variant="outline" className="mt-7 w-fit rounded-full">
+               <a href={HOTEL.mapLink} target="_blank" rel="noreferrer" className="gap-2">
+                 Open directions <ArrowRight className="size-4" />
+               </a>
+             </Button>
+           </div>
+           <div className="min-h-80 border-t lg:min-h-96 lg:border-l lg:border-t-0">
+             <iframe
+               title="Map to Selvi Residency in Muthialpet, Puducherry"
+               src={HOTEL.mapEmbed}
+               loading="lazy"
+               className="h-full min-h-80 w-full border-0 lg:min-h-96"
+               referrerPolicy="no-referrer-when-downgrade"
+             />
+           </div>
+         </div>
       </section>
     </>
   );
