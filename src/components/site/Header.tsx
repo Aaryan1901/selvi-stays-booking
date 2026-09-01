@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,8 @@ function ThemeToggle() {
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const overHero = pathname === "/" && !scrolled;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -49,18 +51,22 @@ export function Header() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         scrolled ? "glass-panel border-b py-2" : "border-b border-transparent py-4",
+        overHero ? "text-primary-foreground" : "text-foreground",
       )}
     >
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 sm:px-6">
         <Link to="/" className="flex min-w-0 items-center gap-3">
-          <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary font-display text-lg text-primary-foreground">
+            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-french-red font-display text-lg text-primary-foreground">
             S
           </span>
           <span className="min-w-0">
             <span className="block truncate font-display text-xl leading-tight">
               {HOTEL.name}
             </span>
-            <span className="block truncate text-[0.65rem] uppercase tracking-[0.22em] text-muted-foreground">
+            <span className={cn(
+              "block truncate text-[0.65rem] uppercase tracking-[0.22em]",
+              overHero ? "text-primary-foreground/70" : "text-muted-foreground",
+            )}>
               Muthialpet · Puducherry
             </span>
           </span>
@@ -72,16 +78,23 @@ export function Header() {
               <Link
                 key={item.to}
                 to={item.to}
-                className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-                activeProps={{ className: "text-foreground bg-secondary" }}
+                 className={cn(
+                   "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                   overHero
+                     ? "text-primary-foreground/75 hover:bg-primary-foreground/12 hover:text-primary-foreground"
+                     : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+                 )}
+                 activeProps={{ className: overHero ? "bg-primary-foreground text-primary" : "text-foreground bg-secondary" }}
                 activeOptions={{ exact: item.to === "/" }}
               >
                 {item.label}
               </Link>
             ))}
           </nav>
-          <ThemeToggle />
-          <Button asChild className="hidden rounded-full sm:inline-flex">
+          <span className={cn(overHero && "[&_button]:text-primary-foreground [&_button]:hover:bg-primary-foreground/12")}>
+            <ThemeToggle />
+          </span>
+          <Button asChild className="hidden rounded-full bg-french-red text-primary-foreground hover:bg-french-red/90 sm:inline-flex">
             <Link to="/booking">Book Now</Link>
           </Button>
 
