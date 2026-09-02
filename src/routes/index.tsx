@@ -173,16 +173,16 @@ function Home() {
         <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-french-blue via-card to-french-red" />
         <div className="relative mx-auto flex min-h-[94svh] max-w-7xl flex-col justify-end px-4 pb-8 pt-32 sm:px-6 sm:pb-12">
           <div className="rise-in max-w-2xl text-hero-foreground">
-            <p className="eyebrow text-primary-foreground/80">Muthialpet · Puducherry</p>
+            <p className="eyebrow text-hero-foreground/80">Muthialpet · Puducherry</p>
             <h1 className="mt-4 font-display text-5xl leading-[1.05] sm:text-7xl">
               {HOTEL.name}
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-hero-foreground/90 sm:text-lg">
               Two thoughtfully kept rooms, warm local hospitality and an easy base for discovering
-              Pondicherry. Stay directly with us from <strong className="font-semibold text-primary-foreground">₹2500 per night</strong>.
+              Pondicherry. Stay directly with us from <strong className="font-semibold text-hero-foreground">₹2500 per night</strong>.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="rounded-full bg-french-red text-primary-foreground shadow-lg hover:bg-french-red/90">
+              <Button asChild size="lg" className="rounded-full bg-french-red text-hero-foreground shadow-lg hover:bg-french-red/90">
                 <Link to="/booking" className="gap-2">
                   Check availability <ArrowRight className="size-4" />
                 </Link>
@@ -191,7 +191,7 @@ function Home() {
                 asChild
                 size="lg"
                 variant="outline"
-                 className="rounded-full border-primary-foreground/60 bg-primary/20 text-primary-foreground hover:bg-primary-foreground/15"
+                 className="rounded-full border-hero-foreground/60 bg-hero-base/30 text-hero-foreground hover:bg-hero-foreground/15"
               >
                 <Link to="/rooms">View rooms</Link>
               </Button>

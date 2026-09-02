@@ -51,7 +51,7 @@ export function Header() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         scrolled ? "glass-panel border-b py-2" : "border-b border-transparent py-4",
-        overHero ? "text-primary-foreground" : "text-foreground",
+        overHero ? "text-hero-foreground" : "text-foreground",
       )}
     >
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 sm:px-6">
@@ -65,7 +65,7 @@ export function Header() {
             </span>
             <span className={cn(
               "block truncate text-[0.65rem] uppercase tracking-[0.22em]",
-              overHero ? "text-primary-foreground/70" : "text-muted-foreground",
+              overHero ? "text-hero-foreground/70" : "text-muted-foreground",
             )}>
               Muthialpet · Puducherry
             </span>
@@ -98,7 +98,7 @@ export function Header() {
               })()
             ))}
           </nav>
-          <span className={cn(overHero && "[&_button]:text-primary-foreground [&_button]:hover:bg-primary-foreground/12")}>
+          <span className={cn(overHero && "[&_button]:text-hero-foreground [&_button]:hover:bg-hero-foreground/12")}>
             <ThemeToggle />
           </span>
           <Button asChild className="hidden rounded-full bg-french-red text-primary-foreground hover:bg-french-red/90 sm:inline-flex">
