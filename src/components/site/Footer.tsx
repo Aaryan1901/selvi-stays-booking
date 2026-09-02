@@ -4,7 +4,7 @@ import { HOTEL } from "@/lib/hotel";
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t bg-primary text-primary-foreground [&_.eyebrow]:text-primary-foreground/70">
+    <footer className="mt-24 border-t bg-footer text-footer-foreground [&_.eyebrow]:text-footer-foreground/70">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
         <div>
           <h3 className="font-display text-3xl">{HOTEL.name}</h3>
@@ -49,7 +49,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-primary-foreground/15 px-4 py-6 text-center text-xs opacity-60 sm:px-6">
+       <div className="border-t border-footer-foreground/15 px-4 py-6 text-center text-xs text-footer-foreground/65 sm:px-6">
         © {new Date().getFullYear()} {HOTEL.name}. Direct bookings, no commission.
       </div>
     </footer>

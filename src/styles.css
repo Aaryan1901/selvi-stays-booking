@@ -35,6 +35,11 @@
   --color-gold-soft: var(--gold-soft);
    --color-french-red: var(--french-red);
    --color-french-blue: var(--french-blue);
+   --color-hero-base: var(--hero-base);
+   --color-hero-scrim: var(--hero-scrim);
+   --color-hero-foreground: var(--hero-foreground);
+   --color-footer: var(--footer);
+   --color-footer-foreground: var(--footer-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
@@ -98,6 +103,11 @@
   --sidebar-accent-foreground: oklch(0.31 0.086 259);
   --sidebar-border: oklch(0.915 0.008 252);
   --sidebar-ring: oklch(0.74 0.13 79);
+   --hero-base: oklch(0.22 0.08 258);
+   --hero-scrim: oklch(0.16 0.06 258 / 78%);
+   --hero-foreground: oklch(0.99 0.004 95);
+   --footer: oklch(0.27 0.075 258);
+   --footer-foreground: oklch(0.98 0.004 95);
 }
 
 .dark {
@@ -137,6 +147,11 @@
   --sidebar-accent-foreground: oklch(0.965 0.006 250);
   --sidebar-border: oklch(1 0 0 / 12%);
   --sidebar-ring: oklch(0.8 0.13 80);
+   --hero-base: oklch(0.16 0.05 258);
+   --hero-scrim: oklch(0.1 0.04 258 / 82%);
+   --hero-foreground: oklch(0.98 0.004 95);
+   --footer: oklch(0.13 0.04 258);
+   --footer-foreground: oklch(0.96 0.006 250);
 }
 
 @layer base {

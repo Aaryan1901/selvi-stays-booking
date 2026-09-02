@@ -218,7 +218,6 @@ function BookingPage() {
           contact: order.guest.contact,
         },
         notes: { reference: confirmed.reference },
-        theme: { color: "#1b2f5e" },
         modal: { ondismiss: () => setPaying(false) },
         handler: (res) => {
           void finishPayment({

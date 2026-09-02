@@ -75,20 +75,27 @@ export function Header() {
         <div className="flex items-center gap-1">
           <nav className="hidden items-center gap-1 lg:flex">
             {NAV.map((item) => (
+              (() => {
+                const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+                return (
               <Link
                 key={item.to}
                 to={item.to}
                  className={cn(
                    "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                   overHero
-                     ? "text-primary-foreground/75 hover:bg-primary-foreground/12 hover:text-primary-foreground"
-                     : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+                    active
+                      ? overHero
+                        ? "bg-primary-foreground text-primary"
+                        : "bg-secondary text-foreground"
+                      : overHero
+                        ? "text-primary-foreground/75 hover:bg-primary-foreground/12 hover:text-primary-foreground"
+                        : "text-muted-foreground hover:bg-secondary hover:text-foreground",
                  )}
-                 activeProps={{ className: overHero ? "bg-primary-foreground text-primary" : "text-foreground bg-secondary" }}
-                activeOptions={{ exact: item.to === "/" }}
               >
                 {item.label}
               </Link>
+                );
+              })()
             ))}
           </nav>
           <span className={cn(overHero && "[&_button]:text-primary-foreground [&_button]:hover:bg-primary-foreground/12")}>

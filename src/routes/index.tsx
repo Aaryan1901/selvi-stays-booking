@@ -24,7 +24,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AMENITIES, ATTRACTIONS, GALLERY, HOTEL, REVIEWS, inr } from "@/lib/hotel";
 import { listRooms, listReviews } from "@/lib/hotel.functions";
-import { roomImages } from "@/lib/room-images";
 import selviExterior from "@/assets/selvi-exterior-street.jpeg.asset.json";
 
 export const Route = createFileRoute("/")({
@@ -81,6 +80,14 @@ function SearchBar() {
 
   return (
     <div className="glass-panel rounded-3xl p-4 sm:p-5">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-foreground/10 pb-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/75">
+          Find your stay
+        </p>
+        <p className="text-sm font-semibold text-foreground">
+          From ₹2500 <span className="font-normal text-muted-foreground">/ night + GST</span>
+        </p>
+      </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto]">
         <div className="space-y-1.5">
           <Label htmlFor="ci" className="text-xs uppercase tracking-widest">
@@ -154,7 +161,7 @@ function Home() {
 
   return (
     <>
-      <section className="relative min-h-[94svh] w-full overflow-hidden bg-primary">
+      <section className="relative min-h-[94svh] w-full overflow-hidden bg-hero-base">
         <img
           src={selviExterior.url}
           alt="The colorful Selvi Residency exterior in Muthialpet, Puducherry"
@@ -162,10 +169,10 @@ function Home() {
           height={1088}
           className="absolute inset-0 size-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-linear-to-b from-primary/75 via-primary/30 to-primary/90" />
+        <div className="absolute inset-0 bg-linear-to-b from-hero-scrim/55 via-hero-scrim/30 to-hero-scrim" />
         <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-french-blue via-card to-french-red" />
         <div className="relative mx-auto flex min-h-[94svh] max-w-7xl flex-col justify-end px-4 pb-8 pt-32 sm:px-6 sm:pb-12">
-          <div className="rise-in max-w-2xl text-primary-foreground">
+          <div className="rise-in max-w-2xl text-hero-foreground">
             <p className="eyebrow text-primary-foreground/80">Muthialpet · Puducherry</p>
             <h1 className="mt-4 font-display text-5xl leading-[1.05] sm:text-7xl">
               {HOTEL.name}
