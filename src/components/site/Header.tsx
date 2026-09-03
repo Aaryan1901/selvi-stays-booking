@@ -107,7 +107,15 @@ export function Header() {
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
+               <Button
+                 variant="ghost"
+                 size="icon"
+                 className={cn(
+                   "lg:hidden",
+                   overHero && "text-hero-foreground hover:bg-hero-foreground/12 hover:text-hero-foreground",
+                 )}
+                 aria-label="Open menu"
+               >
                 <Menu className="size-5" />
               </Button>
             </SheetTrigger>
