@@ -138,8 +138,10 @@ function RoomsPage() {
       </p>
 
       <div className="mt-12 space-y-8">
-        {(rooms as RoomRow[]).map((room) => (
-          <RoomCard key={room.id} room={room} />
+        {(rooms as RoomRow[]).map((room, index) => (
+          <div key={room.id} className={`rise-in stagger-${Math.min(index + 1, 3)}`}>
+            <RoomCard room={room} />
+          </div>
         ))}
       </div>
 

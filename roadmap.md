@@ -1,3 +1,3 @@
-- [ ] Complete final visual polish for the public hotel booking experience
-- [ ] Verify homepage, navigation, pricing, responsive layout, map, and dark-mode contrast
-- [ ] Resolve any runtime or presentation issues found during verification
+- [x] Complete final visual polish for the public hotel booking experience
+- [x] Verify homepage, navigation, pricing, responsive layout, map, and dark-mode contrast
+- [x] Resolve any runtime or presentation issues found during verification

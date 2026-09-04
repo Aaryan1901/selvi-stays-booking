@@ -287,11 +287,13 @@ export const confirmPayment = createServerFn({ method: "POST" })
 export const adminOverview = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden");
+    const { data: role } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    if (!role) throw new Error("Forbidden");
     const [bookings, rooms, coupons, reviews] = await Promise.all([
       context.supabase.from("bookings").select("*").order("created_at", { ascending: false }),
       context.supabase.from("rooms").select("*").order("code"),

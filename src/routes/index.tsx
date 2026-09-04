@@ -240,10 +240,10 @@ function Home() {
         </div>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-           {featured.map((room) => (
+            {featured.map((room, index) => (
              <article
               key={room.id}
-               className="lift-card rise-in stagger-1 overflow-hidden rounded-3xl border bg-card shadow-soft"
+               className={`lift-card rise-in stagger-${Math.min(index + 1, 3)} overflow-hidden rounded-3xl border bg-card shadow-soft`}
             >
               <div className="relative grid aspect-4/3 place-items-center overflow-hidden bg-secondary">
                 <div className="px-6 text-center">
