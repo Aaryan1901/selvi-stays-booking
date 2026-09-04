@@ -36,10 +36,20 @@ type BookingSearch = {
   guests?: number | undefined;
 };
 
+function normalizeRoomCode(value: string | undefined) {
+  if (!value) return undefined;
+  try {
+    const parsed: unknown = JSON.parse(value);
+    return typeof parsed === "string" ? parsed : value;
+  } catch {
+    return value;
+  }
+}
+
 export const Route = createFileRoute("/booking")({
   loader: () => listRooms(),
   validateSearch: (search: Record<string, unknown>): BookingSearch => ({
-    room: typeof search["room"] === "string" ? search["room"] : undefined,
+    room: normalizeRoomCode(typeof search["room"] === "string" ? search["room"] : undefined),
     checkIn: typeof search["checkIn"] === "string" ? search["checkIn"] : undefined,
     checkOut: typeof search["checkOut"] === "string" ? search["checkOut"] : undefined,
     guests: Number(search["guests"]) > 0 ? Number(search["guests"]) : undefined,
@@ -95,7 +105,7 @@ function BookingPage() {
   const beginPayment = useServerFn(startPayment);
   const finishPayment = useServerFn(confirmPayment);
 
-  const [roomCode, setRoomCode] = useState(search.room ?? rooms[0]?.code ?? "");
+  const [roomCode, setRoomCode] = useState(normalizeRoomCode(search.room) ?? rooms[0]?.code ?? "");
   const [checkIn, setCheckIn] = useState(search.checkIn ?? today);
   const [checkOut, setCheckOut] = useState(search.checkOut ?? "");
   const [adults, setAdults] = useState(search.guests ?? 2);

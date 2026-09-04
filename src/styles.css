@@ -228,6 +228,18 @@
   animation: rise-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+@utility stagger-1 {
+  animation-delay: 120ms;
+}
+
+@utility stagger-2 {
+  animation-delay: 240ms;
+}
+
+@utility stagger-3 {
+  animation-delay: 360ms;
+}
+
 @keyframes rise-in {
   from {
     opacity: 0;
