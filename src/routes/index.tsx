@@ -40,11 +40,11 @@ export const Route = createFileRoute("/")({
   notFoundComponent: () => <div className="pt-40 text-center">Not found</div>,
   head: () => ({
     meta: [
-      { title: "Selvi Residency — Book a Room in Puducherry from ₹2500" },
+      { title: "Selvi Residency — Book a Room in Puducherry" },
       {
         name: "description",
         content:
-          "Book Selvi Residency directly: two spotless AC rooms in Muthialpet, Puducherry at a flat ₹2500/night. No commission, instant confirmation.",
+          "Book Selvi Residency directly: two spotless AC rooms in Muthialpet, Puducherry. No commission, instant confirmation.",
       },
       { property: "og:title", content: "Selvi Residency — Hotel in Muthialpet, Puducherry" },
       {
@@ -85,7 +85,7 @@ function SearchBar() {
           Find your stay
         </p>
         <p className="text-sm font-semibold text-foreground">
-          From ₹2500 <span className="font-normal text-muted-foreground">/ night + GST</span>
+          Live rates <span className="font-normal text-muted-foreground">/ night + GST</span>
         </p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto]">
@@ -179,7 +179,7 @@ function Home() {
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-hero-foreground/90 sm:text-lg">
               Two thoughtfully kept rooms, warm local hospitality and an easy base for discovering
-              Pondicherry. Stay directly with us from <strong className="font-semibold text-hero-foreground">₹2500 per night</strong>.
+              Pondicherry. Stay directly with us with clear pricing and personal service.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" className="rounded-full bg-french-red text-hero-foreground shadow-lg hover:bg-french-red/90">
@@ -207,7 +207,7 @@ function Home() {
       <section className="border-b bg-card">
         <div className="mx-auto grid max-w-7xl gap-6 px-4 py-7 sm:grid-cols-3 sm:px-6">
           {[
-            { label: "Direct rate", value: "₹2500 / night", note: "Same price for both rooms" },
+            { label: "Direct booking", value: "Clear pricing", note: "No aggregator commission" },
             { label: "Ideal for", value: "Families & couples", note: "Quiet, residential setting" },
             { label: "Nearby", value: "Promenade Beach", note: "A short ride from the coast" },
           ].map((item) => (
@@ -227,10 +227,10 @@ function Home() {
           <div>
             <p className="eyebrow">Stay with us</p>
             <h2 className="tricolor-rule mt-2 font-display text-4xl sm:text-5xl">Two rooms, thoughtfully kept</h2>
-            <p className="mt-4 max-w-2xl text-muted-foreground">
-              Choose the room that suits your trip. Both are available at a transparent flat rate of
-              <span className="font-semibold text-foreground"> ₹2500 per night</span>, before GST.
-            </p>
+             <p className="mt-4 max-w-2xl text-muted-foreground">
+               Choose the room that suits your trip. Live rates, availability and GST are shown
+               clearly before you confirm.
+             </p>
           </div>
           <Button asChild variant="ghost" className="rounded-full">
             <Link to="/rooms" className="gap-2">
@@ -241,9 +241,9 @@ function Home() {
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
            {featured.map((room) => (
-            <article
+             <article
               key={room.id}
-              className="lift-card overflow-hidden rounded-3xl border bg-card shadow-soft"
+               className="lift-card rise-in stagger-1 overflow-hidden rounded-3xl border bg-card shadow-soft"
             >
               <div className="relative grid aspect-4/3 place-items-center overflow-hidden bg-secondary">
                 <div className="px-6 text-center">
