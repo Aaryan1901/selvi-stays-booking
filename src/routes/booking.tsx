@@ -375,7 +375,7 @@ function BookingPage() {
             <Field label="Check-out" error={errors["checkOut"]}>
               <Input
                 type="date"
-                min={checkIn || today}
+                min={dayAfter(checkIn) || today}
                 value={checkOut}
                 onChange={(e) => setCheckOut(e.target.value)}
                 className="rounded-xl"
