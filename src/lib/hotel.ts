@@ -134,16 +134,20 @@ export const ATTRACTIONS = [
   },
 ];
 
+const deluxe = ROOM_IMAGES["deluxe"] ?? [];
+const family = ROOM_IMAGES["family"] ?? [];
+const common = ROOM_IMAGES["common"] ?? [];
+
 export const GALLERY = [
   { src: propertyPhotos.exterior, label: "Street view" },
   { src: propertyPhotos.facade, label: "Residency facade" },
   { src: propertyPhotos.sign, label: "Selvi Residency sign" },
-  { src: ROOM_IMAGES.deluxe[0]!, label: "Deluxe Double bedroom" },
-  { src: ROOM_IMAGES.family[0]!, label: "Family Room living area" },
-  { src: ROOM_IMAGES.family[1]!, label: "In-room kitchenette" },
-  { src: ROOM_IMAGES.deluxe[2]!, label: "Attached bathroom with geyser" },
-  { src: ROOM_IMAGES.common[0]!, label: "Staircase" },
-  { src: ROOM_IMAGES.deluxe[3]!, label: "Room entrance" },
+  { src: deluxe[0]!, label: "Deluxe Double bedroom" },
+  { src: family[0]!, label: "Family Room living area" },
+  { src: family[1]!, label: "In-room kitchenette" },
+  { src: deluxe[2]!, label: "Attached bathroom with geyser" },
+  { src: common[0]!, label: "Staircase" },
+  { src: deluxe[3]!, label: "Room entrance" },
 ];
 
 export const inr = (value: number) =>
