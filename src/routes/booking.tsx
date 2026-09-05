@@ -46,6 +46,14 @@ function normalizeRoomCode(value: string | undefined) {
   }
 }
 
+function dayAfter(dateString: string) {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return "";
+  date.setDate(date.getDate() + 1);
+  return date.toISOString().slice(0, 10);
+}
+
 export const Route = createFileRoute("/booking")({
   loader: () => listRooms(),
   validateSearch: (search: Record<string, unknown>): BookingSearch => ({
