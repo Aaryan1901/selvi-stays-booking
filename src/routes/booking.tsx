@@ -105,7 +105,7 @@ type Confirmation = Awaited<ReturnType<typeof createBooking>>;
 function BookingPage() {
   const rooms = Route.useLoaderData() as RoomRow[];
   const search = Route.useSearch();
-  const today = new Date().toISOString().slice(0, 10);
+  const [today, setToday] = useState("");
 
   const submitBooking = useServerFn(createBooking);
   const getQuote = useServerFn(quoteBooking);
@@ -114,8 +114,14 @@ function BookingPage() {
   const finishPayment = useServerFn(confirmPayment);
 
   const [roomCode, setRoomCode] = useState(normalizeRoomCode(search.room) ?? rooms[0]?.code ?? "");
-  const [checkIn, setCheckIn] = useState(search.checkIn ?? today);
+  const [checkIn, setCheckIn] = useState(search.checkIn ?? "");
   const [checkOut, setCheckOut] = useState(search.checkOut ?? "");
+
+  useEffect(() => {
+    const t = new Date().toISOString().slice(0, 10);
+    setToday(t);
+    setCheckIn((prev) => prev || t);
+  }, []);
   const [adults, setAdults] = useState(search.guests ?? 2);
   const [children, setChildren] = useState(0);
   const [name, setName] = useState("");
