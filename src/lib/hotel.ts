@@ -1,6 +1,7 @@
 import selviExterior from "@/assets/selvi-exterior-street.jpeg.asset.json";
 import selviSign from "@/assets/selvi-sign.jpeg.asset.json";
 import selviFacade from "@/assets/selvi-facade.jpeg.asset.json";
+import { ROOM_IMAGES } from "@/lib/room-images";
 
 const propertyPhotos = {
   exterior: selviExterior.url,
@@ -133,10 +134,20 @@ export const ATTRACTIONS = [
   },
 ];
 
+const deluxe = ROOM_IMAGES["deluxe"] ?? [];
+const family = ROOM_IMAGES["family"] ?? [];
+const common = ROOM_IMAGES["common"] ?? [];
+
 export const GALLERY = [
   { src: propertyPhotos.exterior, label: "Street view" },
   { src: propertyPhotos.facade, label: "Residency facade" },
   { src: propertyPhotos.sign, label: "Selvi Residency sign" },
+  { src: deluxe[0]!, label: "Deluxe Double bedroom" },
+  { src: family[0]!, label: "Family Room living area" },
+  { src: family[1]!, label: "In-room kitchenette" },
+  { src: deluxe[2]!, label: "Attached bathroom with geyser" },
+  { src: common[0]!, label: "Staircase" },
+  { src: deluxe[3]!, label: "Room entrance" },
 ];
 
 export const inr = (value: number) =>
