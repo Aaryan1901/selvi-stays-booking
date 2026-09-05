@@ -1,6 +1,7 @@
 import selviExterior from "@/assets/selvi-exterior-street.jpeg.asset.json";
 import selviSign from "@/assets/selvi-sign.jpeg.asset.json";
 import selviFacade from "@/assets/selvi-facade.jpeg.asset.json";
+import { ROOM_IMAGES } from "@/lib/room-images";
 
 const propertyPhotos = {
   exterior: selviExterior.url,
